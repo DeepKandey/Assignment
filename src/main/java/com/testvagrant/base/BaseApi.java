@@ -4,8 +4,8 @@ import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import io.restassured.http.Method;
 
-import java.lang.reflect.Method;
 import java.util.Map;
 
 public class BaseApi {
@@ -29,11 +29,15 @@ public class BaseApi {
 
   public Response getResponse(final Method method, final String endPoint){
     if(requestSpecification ==null && requestSpecBuilder !=null){
-      requestSpecification= buildRequestSpec();
+      requestSpecification = buildRequestSpec();
     }
 
     return switch (method.toString()){
-      case "GET" -> RestAssured.given().spec(requestSpecification).get();
+      case "GET" -> RestAssured.given().spec(requestSpecification).get(endPoint);
+      default -> {
+        System.out.println("Please pass correct method");
+        yield null;
+      }
     };
   }
 }

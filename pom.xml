@@ -16,6 +16,8 @@
         <lombok.version>1.18.22</lombok.version>
         <runType>LOCAL</runType>
         <localBrowser>CHROME</localBrowser>
+        <weatherSiteUrl>https://www.accuweather.com/</weatherSiteUrl>
+        <apiBaseURI>https://www.accuweather.com/</apiBaseURI>
     </properties>
 
     <dependencies>

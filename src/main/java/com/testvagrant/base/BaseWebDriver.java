@@ -58,6 +58,7 @@ public class BaseWebDriver {
           }
         };
         driverThreadLocal.set(driver);
+        getDriver().get(properties.getProperty("weatherSiteUrl"));
         getDriver().manage().window().maximize();
     }
 
