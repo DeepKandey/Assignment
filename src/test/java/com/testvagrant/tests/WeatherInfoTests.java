@@ -66,7 +66,6 @@ public class WeatherInfoTests extends BaseWebDriver {
     Response response = baseApi.getResponse(Method.GET, APIConstants.endPoint_weather);
 
     Map<String, Object> weatherResponseMap = new HashMap<>();
-
     weatherResponseMap.put("cityName", cityName);
     weatherResponseMap.put("tempDegrees", response.jsonPath().getDouble("main.temp"));
     weatherResponseMap.put("windSpeed", response.jsonPath().get("wind.speed"));
@@ -82,15 +81,14 @@ public class WeatherInfoTests extends BaseWebDriver {
     weatherForecastPage.isPageLoaded();
     weatherForecastPage.clickMoreDetails();
 
-    Map<String, Object> weatherInfoMapWeb = new HashMap<>();
-
-    weatherInfoMapWeb.put("cityName", cityName);
-    weatherInfoMapWeb.put("tempDegrees", weatherForecastPage.getTemperature());
-    weatherInfoMapWeb.put("windSpeed", weatherForecastPage.getWindSpeed());
-    weatherInfoMapWeb.put("humidity", weatherForecastPage.getHumidity());
+    Map<String, Object> weatherInfoMap = new HashMap<>();
+    weatherInfoMap.put("cityName", cityName);
+    weatherInfoMap.put("tempDegrees", weatherForecastPage.getTemperature());
+    weatherInfoMap.put("windSpeed", weatherForecastPage.getWindSpeed());
+    weatherInfoMap.put("humidity", weatherForecastPage.getHumidity());
 
     weatherInfoWeb =
-        gson.fromJson(groovy.json.JsonOutput.toJson(weatherInfoMapWeb), WeatherInfo.class);
+        gson.fromJson(groovy.json.JsonOutput.toJson(weatherInfoMap), WeatherInfo.class);
   }
 
   Comparator<WeatherInfo> tempComparator =
