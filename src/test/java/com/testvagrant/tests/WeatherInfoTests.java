@@ -22,7 +22,7 @@ import java.util.Properties;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
-public class TestClass extends BaseWebDriver {
+public class WeatherInfoTests extends BaseWebDriver {
 
   private AccuWeatherHomePage accuWeatherHomePage;
   private WeatherForecastPage weatherForecastPage;
