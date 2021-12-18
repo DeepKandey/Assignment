@@ -5,7 +5,9 @@ import com.testvagrant.PageObjects.AccuWeatherHomePage;
 import com.testvagrant.PageObjects.WeatherForecastPage;
 import com.testvagrant.base.BaseApi;
 import com.testvagrant.base.BaseWebDriver;
+import com.testvagrant.utils.APIConstants;
 import com.testvagrant.utils.comparator.WeatherInfo;
+import com.testvagrant.utils.exception.NoSuchCityException;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 import org.testng.annotations.BeforeMethod;
@@ -36,12 +38,12 @@ public class TestClass extends BaseWebDriver {
   }
 
   @Test
-  public void compareResults() {
+  public void verifyCityWeatherInfo() throws NoSuchCityException {
     accuWeatherHomePage = new AccuWeatherHomePage(getDriver());
     weatherForecastPage = new WeatherForecastPage(getDriver());
 
-    getWeatherInfoFromAPI("Pune");
-    getWeatherInfoFromWeb("Pune");
+    getWeatherInfoFromAPI(dataProperties.getProperty("cityName"));
+    getWeatherInfoFromWeb(dataProperties.getProperty("cityName"));
 
     boolean compareTemp = tempComparator.compare(weatherInfoApi, weatherInfoWeb) == 0;
     boolean compareHumidity = humidityComparator.compare(weatherInfoApi, weatherInfoWeb) == 0;
@@ -54,25 +56,14 @@ public class TestClass extends BaseWebDriver {
     }
   }
 
-  private String buildFailureMessage(
-      boolean compareTemp, boolean compareHumidity, boolean compareWindSpeed) {
-    StringBuilder failureMessage = new StringBuilder();
-    failureMessage.append("One or more comparators (");
-    if (!compareTemp) failureMessage.append(" compareTemp");
-    if (!compareHumidity) failureMessage.append(" compareHumidity");
-    if (!compareWindSpeed) failureMessage.append(" compareWindspeed");
-    failureMessage.append("), returned a value outside the acceptable range(s)");
-    return String.valueOf(failureMessage);
-  }
-
   public void getWeatherInfoFromAPI(String cityName) {
-    BaseApi baseApi = new BaseApi("https://api.openweathermap.org", "/data/2.5");
+    BaseApi baseApi = new BaseApi(APIConstants.baseURI, APIConstants.basePath_data);
     Map<String, String> queryParams = new HashMap<>();
-    queryParams.put("appid", "7fe67bf08c80ded756e598d6f8fedaea");
+    queryParams.put("appid", APIConstants.APIKey);
     queryParams.put("q", cityName);
     queryParams.put("units", "metric");
     baseApi.setQueryParams(queryParams);
-    Response response = baseApi.getResponse(Method.GET, "/weather");
+    Response response = baseApi.getResponse(Method.GET, APIConstants.endPoint_weather);
 
     Map<String, Object> weatherResponseMap = new HashMap<>();
 
@@ -85,7 +76,7 @@ public class TestClass extends BaseWebDriver {
         gson.fromJson(groovy.json.JsonOutput.toJson(weatherResponseMap), WeatherInfo.class);
   }
 
-  public void getWeatherInfoFromWeb(String cityName) {
+  public void getWeatherInfoFromWeb(String cityName) throws NoSuchCityException {
     accuWeatherHomePage.isPageLoaded();
     accuWeatherHomePage.enterLocation();
     weatherForecastPage.isPageLoaded();
@@ -122,4 +113,15 @@ public class TestClass extends BaseWebDriver {
         float windSpeedVariance = Float.parseFloat(dataProperties.getProperty("windVariance"));
         return (absValue >= 0 && absValue <= windSpeedVariance) ? 0 : 1;
       });
+
+  private String buildFailureMessage(
+      boolean compareTemp, boolean compareHumidity, boolean compareWindSpeed) {
+    StringBuilder failureMessage = new StringBuilder();
+    failureMessage.append("One or more comparators (");
+    if (!compareTemp) failureMessage.append(" compareTemp");
+    if (!compareHumidity) failureMessage.append(" compareHumidity");
+    if (!compareWindSpeed) failureMessage.append(" compareWindspeed");
+    failureMessage.append("), returned a value outside the acceptable range(s)");
+    return String.valueOf(failureMessage);
+  }
 }

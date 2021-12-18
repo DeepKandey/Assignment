@@ -1,6 +1,7 @@
 package com.testvagrant.PageObjects;
 
 import com.testvagrant.base.BasePage;
+import com.testvagrant.utils.exception.NoSuchCityException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -27,11 +28,15 @@ public class AccuWeatherHomePage extends BasePage {
     }
   }
 
-  public void enterLocation() {
+  public void enterLocation() throws NoSuchCityException {
     waitForElementToBeVisible(searchInput);
     searchInput.sendKeys("Pune");
-    waitForElementToBeVisible(resultsContainer);
-    searchInput.sendKeys(Keys.DOWN);
-    searchInput.sendKeys(Keys.ENTER);
+    try {
+      waitForElementToBeVisible(resultsContainer);
+      searchInput.sendKeys(Keys.DOWN);
+      searchInput.sendKeys(Keys.ENTER);
+    } catch (Exception exception) {
+      throw new NoSuchCityException("Given city is not available");
+    }
   }
 }

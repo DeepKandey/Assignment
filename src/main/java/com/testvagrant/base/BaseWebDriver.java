@@ -1,5 +1,6 @@
 package com.testvagrant.base;
 
+import com.testvagrant.utils.exception.NoSuchDriverException;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -34,7 +35,7 @@ public class BaseWebDriver {
         }
     }
 
-    protected void createLocalDriver() throws IOException{
+    protected void createLocalDriver() throws IOException, NoSuchDriverException {
         Properties properties = new Properties();
         properties.load(this.getClass().getResourceAsStream("/maven.properties"));
 
@@ -53,8 +54,7 @@ public class BaseWebDriver {
                     yield new FirefoxDriver();
             }
           default -> {
-              System.out.println("OK");
-              yield null;
+              throw new NoSuchDriverException("Unsupported driver type requested");
           }
         };
         driverThreadLocal.set(driver);
