@@ -118,9 +118,9 @@ public class TestClass extends BaseWebDriver {
       boolean compareTemp, boolean compareHumidity, boolean compareWindSpeed) {
     StringBuilder failureMessage = new StringBuilder();
     failureMessage.append("One or more comparators (");
-    if (!compareTemp) failureMessage.append(" compareTemp");
-    if (!compareHumidity) failureMessage.append(" compareHumidity");
-    if (!compareWindSpeed) failureMessage.append(" compareWindspeed");
+    if (!compareTemp) failureMessage.append("compareTemp");
+    if (!compareHumidity) failureMessage.append("compareHumidity");
+    if (!compareWindSpeed) failureMessage.append("compareWindSpeed");
     failureMessage.append("), returned a value outside the acceptable range(s)");
     return String.valueOf(failureMessage);
   }

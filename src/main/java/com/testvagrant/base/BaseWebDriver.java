@@ -46,6 +46,7 @@ public class BaseWebDriver {
                    WebDriverManager.chromedriver().setup();
                    ChromeOptions options = new ChromeOptions();
                    options.addArguments("--disable-notifications");
+                   options.addArguments("--incognito");
                    options.setExperimentalOption("excludeSwitches", List.of("enable-automation"));
                     yield new ChromeDriver(options);
             }

@@ -1,6 +1,7 @@
 package com.testvagrant.PageObjects;
 
 import com.testvagrant.base.BasePage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -37,6 +38,8 @@ public class WeatherForecastPage extends BasePage {
 
   public void clickMoreDetails() {
     waitForElementToBeVisible(moreDetailsTextElement);
+    elementClick(moreDetailsTextElement);
+    driver.navigate().refresh();
     elementClick(moreDetailsTextElement);
   }
 
