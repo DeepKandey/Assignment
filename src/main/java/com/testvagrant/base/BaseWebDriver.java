@@ -3,12 +3,14 @@ package com.testvagrant.base;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
 public class BaseWebDriver {
@@ -40,8 +42,11 @@ public class BaseWebDriver {
 
       driver =  switch (browser.toUpperCase()) {
             case "CHROME" ->  {
-                    WebDriverManager.chromedriver().setup();
-                    yield new ChromeDriver();
+                   WebDriverManager.chromedriver().setup();
+                   ChromeOptions options = new ChromeOptions();
+                   options.addArguments("--disable-notifications");
+                   options.setExperimentalOption("excludeSwitches", List.of("enable-automation"));
+                    yield new ChromeDriver(options);
             }
             case "FIREFOX" -> {
                     WebDriverManager.firefoxdriver().setup();
@@ -53,6 +58,7 @@ public class BaseWebDriver {
           }
         };
         driverThreadLocal.set(driver);
+        getDriver().manage().window().maximize();
     }
 
     @AfterMethod

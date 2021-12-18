@@ -7,20 +7,20 @@ import org.openqa.selenium.support.FindBy;
 
 public class WeatherForecastPage extends BasePage {
 
+  @FindBy(xpath = "//span[@class='cur-con-weather-card__cta']//span[text()='More Details']")
+  private WebElement moreDetailsTextElement;
+
   @FindBy(xpath = "//div[@class='temp']")
   private WebElement temperatureInCelsius;
 
-  @FindBy(xpath = "((//div[@class='spaced-content detail'])[1]/span)[2]")
-  private WebElement realFeelShadeTemperature;
-
-  @FindBy(xpath = "((//div[@class='spaced-content detail'])[2]/span)[2]")
-  private WebElement airQuality;
-
-  @FindBy(xpath = "((//div[@class='spaced-content detail'])[3]/span)[2]")
+  @FindBy(xpath = "((//div[@class='detail-item spaced-content'])[2]//div)[2]")
   private WebElement windSpeed;
 
-  @FindBy(xpath = "((//div[@class='spaced-content detail'])[4]/span)[2]")
-  private WebElement windGustSpeed;
+  @FindBy(xpath = "((//div[@class='detail-item spaced-content'])[4]//div)[2]")
+  private WebElement humidityValue;
+
+  @FindBy(css = "div#dismiss-button")
+  private WebElement dismissButton;
 
   public WeatherForecastPage(WebDriver driver) {
     super(driver);
@@ -35,28 +35,23 @@ public class WeatherForecastPage extends BasePage {
     }
   }
 
+  public void clickMoreDetails() {
+    waitForElementToBeVisible(moreDetailsTextElement);
+    elementClick(moreDetailsTextElement);
+  }
+
   public String getTemperature() {
     waitForElementToBeVisible(temperatureInCelsius);
-    return temperatureInCelsius.getText().trim();
-  }
-
-  public String getRealFeelShadeTemperature() {
-    waitForElementToBeVisible(realFeelShadeTemperature);
-    return realFeelShadeTemperature.getText().trim();
-  }
-
-  public String getAirQuality() {
-    waitForElementToBeVisible(airQuality);
-    return airQuality.getText().trim();
+    return temperatureInCelsius.getText().replaceAll("[^0-9\\.]", "").trim();
   }
 
   public String getWindSpeed() {
     waitForElementToBeVisible(windSpeed);
-    return windSpeed.getText().trim();
+    return windSpeed.getText().replaceAll("[^0-9\\.]", "").trim();
   }
 
-  public String getWindGustSpeed() {
-    waitForElementToBeVisible(windGustSpeed);
-    return windGustSpeed.getText().trim();
+  public String getHumidity() {
+    waitForElementToBeVisible(humidityValue);
+    return humidityValue.getText().replaceAll("[^0-9\\.]", "").trim();
   }
 }
