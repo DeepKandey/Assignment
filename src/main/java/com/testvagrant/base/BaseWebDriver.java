@@ -2,6 +2,8 @@ package com.testvagrant.base;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -9,7 +11,7 @@ import org.testng.annotations.BeforeMethod;
 import java.io.IOException;
 import java.util.Properties;
 
-public class BaseWedDriver {
+public class BaseWebDriver {
 
     protected WebDriver driver;
 
@@ -36,10 +38,20 @@ public class BaseWedDriver {
 
         String browser = properties.getProperty("localBrowser");
 
-        switch (browser.toUpperCase()) {
-            case "CHROME" -> driver= WebDriverManager.chromedriver().getWebDriver();
-            case "FIREFOX" -> driver= WebDriverManager.firefoxdriver().getWebDriver();
-        }
+      driver =  switch (browser.toUpperCase()) {
+            case "CHROME" ->  {
+                    WebDriverManager.chromedriver().setup();
+                    yield new ChromeDriver();
+            }
+            case "FIREFOX" -> {
+                    WebDriverManager.firefoxdriver().setup();
+                    yield new FirefoxDriver();
+            }
+          default -> {
+              System.out.println("OK");
+              yield null;
+          }
+        };
         driverThreadLocal.set(driver);
     }
 
