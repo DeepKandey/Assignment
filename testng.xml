@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="POMWithThreadLocal suite" parallel="methods"
+       verbose="2" thread-count="4">
+    <listeners>
+        <listener class-name="com.testvagrant.report.ExtentReportListener"/>
+    </listeners>
+
+    <test name="Test">
+        <classes>
+            <class name="com.testvagrant.tests.WeatherInfoTests"/>
+        </classes>
+    </test> <!-- Default test -->
+
+</suite> <!-- Default suite -->
